@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import { CreateTodoModel } from 'types/models/TodoModel'
 import { useState } from 'react'
 import { TextField } from 'components/shared/TextField'
-import { PickColor } from '../PickColor'
-import { useWindowResize } from 'hooks/useWindowResize'
+import { PickColor } from 'components/shared/PickColor'
+import { useWindowDimensions } from 'hooks/useWindowResize'
 import { todoService } from 'services/http/todoService'
 import { Todo } from 'types/Todo'
 import { toast } from 'react-toastify'
@@ -33,13 +33,16 @@ export function CreateTodoCard({ handleAddTodo }: CreateTodoCardProps) {
   })
   const isFavorite = watch('isFavorite')
   const color = watch('color')
-  const { width: windowWitdh } = useWindowResize()
+  const { width: windowWitdh } = useWindowDimensions()
   const [error, setError] = useState('')
 
   const onCreateTodo = async (data: CreateTodoModel) => {
     setError('')
     try {
-      const todo = await todoService.createTodo(data)
+      const todo = await todoService.createTodo({
+        ...data,
+        color
+      })
 
       handleAddTodo(todo)
       setCreating(false)
@@ -119,7 +122,11 @@ export function CreateTodoCard({ handleAddTodo }: CreateTodoCardProps) {
         ) : (
           <span className={styles.createTodo}>Criar nota...</span>
         )}
-        {error && <span data-testid="error" className={styles.error}>{error}</span>}
+        {error && (
+          <span data-testid="error" className={styles.error}>
+            {error}
+          </span>
+        )}
       </div>
       {creating && (
         <div className={styles.actionsBox}>

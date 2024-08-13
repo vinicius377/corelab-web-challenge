@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export function useWindowResize() {
+export function useWindowDimensions() {
   const [width, setWidth] = useState(window.innerWidth)
   const setuped = useRef(false)
 

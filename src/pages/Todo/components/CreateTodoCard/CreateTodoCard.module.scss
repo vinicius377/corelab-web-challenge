@@ -36,6 +36,10 @@
     outline: none;
     cursor: pointer;
   }
+
+  @include laptop {
+    padding: 0.5rem 0.75rem;
+  }
 }
 
 .content {
@@ -61,6 +65,10 @@
   .error {
     color: #f25d5d;
     font-size: 0.75rem;
+  }
+
+  @include laptop {
+    padding: 0.5rem 0.75rem;
   }
 }
 

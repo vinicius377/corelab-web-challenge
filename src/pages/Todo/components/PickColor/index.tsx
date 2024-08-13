@@ -27,7 +27,7 @@ export function PickColor({
         const bounds = buttonRef.current.getBoundingClientRect()
         const spaceRight = window.innerWidth - bounds.x
         if (spaceRight - 20 < width) {
-          setWidth(spaceRight - 16)
+          setWidth(spaceRight - 50)
         } else if (spaceRight + 30 > defaultWidth) {
           setWidth(defaultWidth)
         }
@@ -40,7 +40,7 @@ export function PickColor({
     const handleCloseOnCllick = (e: any) => {
       const target = e.target as HTMLElement
 
-      if (target.outerHTML.includes(buttonRef.current?.outerHTML || '')) {
+      if (!palleteBoxRef.current?.contains(target) && !buttonRef.current?.contains(target)) {
         setPickingColor(false)
       }
     }

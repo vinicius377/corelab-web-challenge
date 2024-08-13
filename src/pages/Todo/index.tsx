@@ -4,15 +4,16 @@ import styles from './Todo.module.scss'
 import { Todo } from 'types/Todo'
 import { todoService } from 'services/http/todoService'
 import { UpdateTodoModel } from 'types/models/TodoModel'
-import { useWindowResize } from 'hooks/useWindowResize'
+import { useWindowDimensions } from 'hooks/useWindowResize'
 import { CreateTodoCard } from './components/CreateTodoCard'
 import { useLayoutContext } from 'components/layout/context/LayoutContext'
 import { useDebounce } from 'hooks/useDebounce'
 import { usePagination } from 'hooks/usePagination'
 import { toast } from 'react-toastify'
 import ReactPaginate from 'react-paginate'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Frown } from 'lucide-react'
 import { Loading } from 'components/shared/Loading'
+import { Kind } from 'types/FilterKind'
 
 interface TodoSeparation {
   favorites: Todo[]
@@ -20,8 +21,8 @@ interface TodoSeparation {
 }
 
 export function TodoPage() {
-  const { width: windowWidth } = useWindowResize()
-  const { searchTerm } = useLayoutContext()
+  const { width: windowWidth } = useWindowDimensions()
+  const { searchTerm, color, kind } = useLayoutContext()
   const { loading, changeParams, params, setData, data } = usePagination({
     fetcher: todoService.listTodo
   })
@@ -41,12 +42,38 @@ export function TodoPage() {
     )
   }, [todos])
 
+  const emptyMessage = useMemo(() => {
+    if (todos.length) return ''
+    if (searchTerm.length > 2) return `Não existe TODO's para pesquisa '${searchTerm}`
+    if (!!color) return `Não existe TODO's com essa cor`
+    if (kind !== Kind.none && kind !== Kind.all) return `Não existe TODO's para esse tipo`
+
+    return `Não existe TODO's`
+  }, [todos])
+
   const handleSearchTerm = () => {
     changeParams({
       term: searchTerm
     })
   }
   const searchTermDebounce = useDebounce({ delay: 500, fn: handleSearchTerm })
+
+  useEffect(() => {
+    if (color !== null) changeParams({ color })
+  }, [color])
+
+  useEffect(() => {
+    if (kind !== Kind.none) {
+      const kinds = {
+        [Kind.others]: false,
+        [Kind.favorite]: true,
+        [Kind.all]: undefined
+      }
+      changeParams({
+        favorites: kinds[kind]
+      })
+    }
+  }, [kind])
 
   useEffect(() => {
     if (searchTerm) searchTermDebounce()
@@ -92,11 +119,15 @@ export function TodoPage() {
   return (
     <div className={styles.Todo}>
       <CreateTodoCard handleAddTodo={handleAddTodo} />
-      <section role='grid' className={styles.cardBox}>
+      <section className={styles.cardBox}>
+        {!todos.length && <div className={styles.emptyMessage}>
+          <Frown color="#c4c4c4" size={40} />
+          <span>{emptyMessage}</span>
+        </div>}
         {!!favorites.length && (
           <div>
             <h3 aria-description='Conjunto de todos marcadas como favoritas' tabIndex={0} className={styles.title}>Favoritas</h3>
-            <section className={styles.todoGrid}>
+            <section role="grid" className={styles.todoGrid}>
               {favorites.map(todo => (
                 <Card
                   windowWidth={windowWidth}
@@ -113,7 +144,7 @@ export function TodoPage() {
         {!!others.length && (
           <div>
             <h3 aria-description='Conjunto de todos' role='grid' tabIndex={0} className={styles.title}>Outras</h3>
-            <section className={styles.todoGrid}>
+            <section role="grid" className={styles.todoGrid}>
               {others.map(todo => (
                 <Card
                   windowWidth={windowWidth}
@@ -133,6 +164,8 @@ export function TodoPage() {
           <ReactPaginate
             pageCount={Math.ceil(total / params.size!)}
             onPageChange={({selected}) => changeParams({ page: selected})}
+
+            forcePage={params?.page || 0 }
             breakLabel='...'
             marginPagesDisplayed={0}
             pageRangeDisplayed={3}

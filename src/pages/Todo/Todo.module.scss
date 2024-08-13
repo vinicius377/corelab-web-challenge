@@ -17,6 +17,19 @@
       color: #464646;
 
     }
+
+    .emptyMessage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 30rem);
+      gap: 0.5rem;
+
+      span {
+        color: #353535;
+      }
+    }
   }
 }
 

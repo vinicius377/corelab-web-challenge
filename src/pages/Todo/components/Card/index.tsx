@@ -84,6 +84,12 @@ export function Card({
     }
   }
 
+  const handlePressPencil = (e: React.KeyboardEvent<any>) => {
+    if (e.key === 'Enter' && editingTodo) {
+      handleValidateFields()
+    }
+  }
+
   useEffect(() => {
     setValue('description', todo.description)
     setValue('title', todo.title)
@@ -95,6 +101,7 @@ export function Card({
       onKeyDown={handleKeyDownFavoriteBtn}
       className={styles.starButton}
       type="button"
+      data-testid="star-btn"
     >
       <Star
         color="#455A64"
@@ -142,6 +149,7 @@ export function Card({
               name="title"
               tabIndex={0}
               onKeyDown={handleKeyDownEditing}
+              data-testid="title"
             />
           </header>
           <div className={styles.content}>
@@ -152,17 +160,19 @@ export function Card({
               tabIndex={0}
               onKeyDown={handleKeyDownEditing}
             ></textarea>
-            {error && <span className={styles.error}>{error}</span>}
           </div>
+          <span data-testid="error" style={{ visibility: error ? 'visible' : 'hidden'}} className={styles.error}>{error}</span>
           <div className={styles.cardActions}>
             <div className={styles.actionLeft}>
               <button
                 className={styles.activeAction}
                 style={{ background: editingTodo ? '#ffe3b3' : todo.color }}
                 type="submit"
+                data-testid="pencil_edit"
                 tabIndex={0}
                 aria-label="Pressione enter para editar"
                 onClick={handleValidateFields}
+                onKeyDown={handlePressPencil}
               >
                 <Pencil color="#51646E" size={18} />
               </button>
@@ -172,6 +182,7 @@ export function Card({
               onClick={() => onDeleteTodo(todo._id)}
               aria-label="Excluir todo"
               className={styles.removeTodo}
+              data-testid="x_btn"
             >
               <X color="#51646E" />
             </button>

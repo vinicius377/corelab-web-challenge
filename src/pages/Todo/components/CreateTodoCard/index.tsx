@@ -18,13 +18,19 @@ interface CreateTodoCardProps {
 
 export function CreateTodoCard({ handleAddTodo }: CreateTodoCardProps) {
   const [creating, setCreating] = useState(false)
-  const { register, setValue, handleSubmit, watch, reset, formState: { errors } } =
-    useForm<CreateTodoModel>({
-      defaultValues: {
-        color: '#fff'
-      },
-      resolver: zodResolver(todoSchemaValidation)
-    })
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors }
+  } = useForm<CreateTodoModel>({
+    defaultValues: {
+      color: '#fff'
+    },
+    resolver: zodResolver(todoSchemaValidation)
+  })
   const isFavorite = watch('isFavorite')
   const color = watch('color')
   const { width: windowWitdh } = useWindowResize()
@@ -70,6 +76,7 @@ export function CreateTodoCard({ handleAddTodo }: CreateTodoCardProps) {
       className={styles.starButton}
       type="button"
       tabIndex={creating ? 0 : -1}
+      data-testid="star-btn"
     >
       <Star
         color="#455A64"
@@ -99,6 +106,7 @@ export function CreateTodoCard({ handleAddTodo }: CreateTodoCardProps) {
           name="title"
           icon={<StarIcon />}
           tabIndex={creating ? 0 : -1}
+          data-testid="title"
         />
       </header>
       <div className={styles.content}>
@@ -111,12 +119,17 @@ export function CreateTodoCard({ handleAddTodo }: CreateTodoCardProps) {
         ) : (
           <span className={styles.createTodo}>Criar nota...</span>
         )}
-        {error && <span className={styles.error}>{error}</span>}
+        {error && <span data-testid="error" className={styles.error}>{error}</span>}
       </div>
       {creating && (
         <div className={styles.actionsBox}>
           <div className={styles.submitButtonBox}>
-            <button onClick={handleValidateFields} className={styles.submitButton} type="submit">
+            <button
+              data-testid="create_btn"
+              onClick={handleValidateFields}
+              className={styles.submitButton}
+              type="submit"
+            >
               CRIAR
             </button>
             <PickColor
@@ -130,7 +143,8 @@ export function CreateTodoCard({ handleAddTodo }: CreateTodoCardProps) {
             onClick={handleCloseForm}
             type="button"
             tabIndex={0}
-            aria-label='Fechar criacao do todo'
+            aria-label="Fechar criacao do todo"
+            data-testid="x-btn"
           >
             <X color="#51646E" />
           </button>

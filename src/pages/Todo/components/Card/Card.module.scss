@@ -6,7 +6,7 @@
   animation: cardAnimationAppears 300ms linear forwards;
   position: static;
 
-  &[data-disappear="true"] {
+  &[data-disappear='true'] {
     animation: cardAnimationDisAppears 300ms linear forwards;
   }
 }
@@ -43,7 +43,6 @@
     outline: none;
     cursor: pointer;
   }
-
 }
 
 .content {
@@ -66,12 +65,13 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.875rem;
   }
+}
 
-  .error {
-    color: #f25d5d;
-    font-size: 0.75rem;
-  }
-
+.error {
+  color: #f25d5d;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  min-height: 1rem;
 }
 
 .cardActions {
@@ -111,14 +111,13 @@
 
 @keyframes cardAnimationAppears {
   from {
-    transform: translatey(var(--offset-animation))
+    transform: translatey(var(--offset-animation));
   }
 
   to {
-    transform: translatey(0)
+    transform: translatey(0);
   }
 }
-
 
 @keyframes cardAnimationDisAppears {
   from {
@@ -126,6 +125,6 @@
   }
 
   to {
-    transform: translatey(var(--offset-animation))
+    transform: translatey(var(--offset-animation));
   }
 }

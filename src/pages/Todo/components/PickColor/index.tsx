@@ -71,15 +71,17 @@ export function PickColor({
           type="button"
           aria-label="Pressione enter para escolher uma cor"
           tabIndex={-1}
+          data-testid="trigger"
         >
           <PaintBucket size={20} color="#51646E" />
         </button>
         <div
-          data-active={pickingColor}
           className={styles.colorsPallete}
           style={{ width }}
           ref={palleteBoxRef}
           data-id={id}
+          data-active={pickingColor}
+          data-testid="pallete"
           aria-label="Palheta de cores"
         >
           {COLORS.map((color, i) => (

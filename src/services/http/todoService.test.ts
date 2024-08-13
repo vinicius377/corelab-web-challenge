@@ -19,7 +19,7 @@ describe(TodoService.name, () => {
     apiMock = api
   })
 
-  it(`should pass params to get when ${TodoService.prototype.listTodo.name} is called`, async () => {
+  it(`should pass params to get when listTodo is called`, async () => {
     const params: Pagination = {
       page: 0,
       size: 10
@@ -31,7 +31,7 @@ describe(TodoService.name, () => {
     expect(apiMock.get).toHaveBeenCalledWith('todo', { params })
   })
 
-  it(`should return data and total when ${TodoService.prototype.listTodo.name} is called`, async () => {
+  it(`should return data and total when listTodo is called`, async () => {
     const params: Pagination = {
       page: 0,
       size: 10
@@ -49,7 +49,7 @@ describe(TodoService.name, () => {
   })
 
 
-  it(`should return the updated todo when ${TodoService.prototype.updateTodo.name} is called`, async () => {
+  it(`should return the updated todo when updateTodo is called`, async () => {
     const response: UpdateTodoModel = {
       id: 'teste',
       title: 'Teste'
@@ -62,7 +62,7 @@ describe(TodoService.name, () => {
   })
 
 
-  it(`should return the new todo when ${TodoService.prototype.createTodo.name} is called`, async () => {
+  it(`should return the new todo when createTodo is called`, async () => {
     const response: CreateTodoModel = {
       title: 'Teste',
       description: 'TESTANDO'
@@ -75,7 +75,7 @@ describe(TodoService.name, () => {
   })
 
 
-  it(`should return the deleted todo when ${TodoService.prototype.deleteTodo.name} is called`, async () => {
+  it(`should return the deleted todo when deleteTodo is called`, async () => {
     const response: CreateTodoModel = {
       title: 'Teste',
       description: 'TESTANDO'

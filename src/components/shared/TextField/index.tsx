@@ -9,10 +9,19 @@ interface TextFieldProps extends ComponentProps<'input'> {
   register?: UseFormRegister<any>
 }
 
-export function TextField({ icon, classNameBox, register = () => ({} as UseFormRegisterReturn<any>), ...rest }: TextFieldProps) {
+export function TextField({
+  icon,
+  classNameBox,
+  register = () => ({}) as UseFormRegisterReturn<any>,
+  ...rest
+}: TextFieldProps) {
   return (
     <div className={clsx(styles.Input, classNameBox)}>
-      <input {...rest} {...register(rest.name || '')} className={clsx(styles.field, rest.className)} />
+      <input
+        {...rest}
+        {...register(rest.name || '')}
+        className={clsx(styles.field, rest.className)}
+      />
       {icon ? icon : null}
     </div>
   )

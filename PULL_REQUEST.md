@@ -1,5 +1,12 @@
 ## Aplicação de TODO's
 
+Aplicação criada para o gerenciamento de TODO's
+
+#### Funcionalidades
+- Criação, edição, listagem e deleção de TODO's
+- Filtros para a listagem de TODO's
+- Paginanação para a listagem de TODO's
+
 #### Principais tecnologias utilizadas
 
 Front-end

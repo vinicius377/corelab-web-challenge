@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { Card } from './components/Card'
 import styles from './Todo.module.scss'
 import { Todo } from 'types/Todo'
@@ -31,16 +31,16 @@ export function TodoPage() {
   const { favorites, others } = useMemo(() => {
     return todos.reduce(
       (acc, todo) => {
-        if (todo.isFavorite) {
+        if (todo.isFavorite && kind !== Kind.others) {
           acc.favorites.push(todo)
-        } else {
+        } else if (kind !== Kind.favorite && !todo.isFavorite){
           acc.others.push(todo)
         }
         return acc
       },
       { favorites: [], others: [] } as TodoSeparation
     )
-  }, [todos])
+  }, [todos, kind])
 
   const emptyMessage = useMemo(() => {
     if (todos.length) return ''
@@ -59,7 +59,7 @@ export function TodoPage() {
   const searchTermDebounce = useDebounce({ delay: 500, fn: handleSearchTerm })
 
   useEffect(() => {
-    if (color !== null) changeParams({ color })
+    if (color !== null) changeParams({ color, page: 0 })
   }, [color])
 
   useEffect(() => {
@@ -70,7 +70,8 @@ export function TodoPage() {
         [Kind.all]: undefined
       }
       changeParams({
-        favorites: kinds[kind]
+        favorites: kinds[kind],
+        page: 0
       })
     }
   }, [kind])
@@ -136,6 +137,7 @@ export function TodoPage() {
                   onDeleteTodo={handleDeleteTodo}
                   key={todo._id}
                   animationTo='down'
+                  kind={kind}
                 />
               ))}
             </section>
@@ -153,6 +155,7 @@ export function TodoPage() {
                   onDeleteTodo={handleDeleteTodo}
                   key={todo._id}
                   animationTo='top'
+                  kind={kind}
                 />
               ))}
             </section>

@@ -3,8 +3,6 @@ import { useWindowDimensions } from 'hooks/useWindowResize'
 import { Filter, X } from 'lucide-react'
 import {
   ChangeEvent,
-  ChangeEventHandler,
-  useContext,
   useEffect,
   useRef,
   useState
@@ -18,7 +16,6 @@ export function Filters() {
   const boxFilterRef = useRef<HTMLDivElement | null>(null)
   const [pickingFilter, setPickingFilter] = useState(false)
   const { width: windowWidth } = useWindowDimensions()
-  const defaultWidth = 490
   const { color, setColor, kind, setKind } = useLayoutContext()
 
   useEffect(() => {

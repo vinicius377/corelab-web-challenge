@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { TextField } from 'components/shared/TextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { todoSchemaValidation } from 'utils/schemaValidation/todoSchema'
+import { Kind } from 'types/FilterKind'
 
 interface CardProps {
   todo: Todo
@@ -15,6 +16,7 @@ interface CardProps {
   onDeleteTodo: (id: string) => void
   windowWidth: number
   animationTo: 'top' | 'down'
+  kind: Kind
 }
 
 export function Card({
@@ -22,7 +24,8 @@ export function Card({
   onChangeData,
   onDeleteTodo,
   windowWidth,
-  animationTo
+  animationTo,
+  kind
 }: CardProps) {
   const {
     register,
@@ -64,10 +67,14 @@ export function Card({
   }
 
   const handleToggleFavorite = () => {
-    cardRef.current?.setAttribute('data-disappear', 'true')
-    setTimeout(() => {
-      handleChangeData({ isFavorite: !todo.isFavorite })
-    }, 300)
+    if (kind !== Kind.none && kind !== Kind.all) {
+    handleChangeData({ isFavorite: !todo.isFavorite })
+    } else {
+      cardRef.current?.setAttribute('data-disappear', 'true')
+      setTimeout(() => {
+        handleChangeData({ isFavorite: !todo.isFavorite })
+      }, 300)
+    }
   }
 
   const handleKeyDownFavoriteBtn = (
@@ -161,7 +168,13 @@ export function Card({
               onKeyDown={handleKeyDownEditing}
             ></textarea>
           </div>
-          <span data-testid="error" style={{ visibility: error ? 'visible' : 'hidden'}} className={styles.error}>{error}</span>
+          <span
+            data-testid="error"
+            style={{ visibility: error ? 'visible' : 'hidden' }}
+            className={styles.error}
+          >
+            {error}
+          </span>
           <div className={styles.cardActions}>
             <div className={styles.actionLeft}>
               <button
